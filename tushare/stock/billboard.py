@@ -344,31 +344,30 @@ def _f_rows(x):
 
 
 def lhb_details(retry_count= 3, pause= 0.001, code=None, date=None):
-    """
-    获取最近一个交易日龙虎榜上榜个股的交易详情. 包括买1-5和卖1-5的买入及卖出量,营业部名称.
-    
-    可选参数:
-    证券代码(code): 指定代码用于只获取该证券的交易详情.省略的话会返回当日所有上榜证券的交易详情
-    日期(date): 获取指定日期的交易详情.默认为最近一个交易日
-    
-    返回值:
-    ----------
-    code:股票代码
-    name:股票名称     
-    date:交易日期     
-    买1-5营业部名称及买入和卖出额及净额(万)    
-    卖1-5营业部名称及买入和卖出额净额(万)    
-   
-    """
-	
+	"""
+	获取最近一个交易日龙虎榜上榜个股的交易详情. 包括买1-5和卖1-5的买入及卖出量,营业部名称.
+
+	可选参数:
+	证券代码(code): 指定代码用于只获取该证券的交易详情.省略的话会返回当日所有上榜证券的交易详情
+	日期(date): 获取指定日期的交易详情.默认为最近一个交易日
+
+	返回值:
+	----------
+	code:股票代码
+	name:股票名称     
+	date:交易日期     
+	买1-5营业部名称及买入和卖出额及净额(万)    
+	卖1-5营业部名称及买入和卖出额净额(万)    
+
+	"""
 	if date is None:
-        if du.get_hour() < 18:
-            date = du.last_tddate()
-        else:
-            date = du.today() 
-    else:
-        if(du.is_holiday(date)):
-            return None
+		if du.get_hour() < 18:
+		    date = du.last_tddate()
+		else:
+		    date = du.today() 
+	else:
+		if(du.is_holiday(date)):
+		    return None
 	
 	if code is None:
 		print('请输入股票代码,比如： lhb_details(000001)')
@@ -378,10 +377,10 @@ def lhb_details(retry_count= 3, pause= 0.001, code=None, date=None):
 	text = urlopen(lhb_details_url%(code,date),timeout=10).read()
 	text = text.decode('GBK')
 	text = text.split('details=')[1]
-    text = eval(text, type('Dummy', (dict,), 
-                    dict(__getitem__ = lambda s, n:n))())
-    text = json.dumps(text)
-    text = json.loads(text)
+	text = eval(text, type('Dummy', (dict,), 
+		dict(__getitem__ = lambda s, n:n))())
+	text = json.dumps(text)
+	text = json.loads(text)
 	## text['buy'] = list of dicts
 	## text['sell'] = list of dicts
 	
