@@ -360,6 +360,7 @@ def lhb_details(retry_count= 3, pause= 0.001, code=None, date=None):
     卖1-5营业部名称及买入和卖出额净额(万)    
    
     """
+	'''
 	## SINA URL
 	## http://vip.stock.finance.sina.com.cn/q/api/jsonp.php/var%20details=/InvestConsultService.getLHBComBSData?symbol=002579&tradedate=2017-03-03&type=01
     ## return:
@@ -380,7 +381,7 @@ def lhb_details(retry_count= 3, pause= 0.001, code=None, date=None):
 	## ["000559","万向钱潮","S","3","2014-02-28","信达证券股份有限公司福州远洋路证券营业部","5634897.8000","37590137.1300"],\
 	## ["000559","万向钱潮","S","4","2014-02-28","海通证券股份有限公司嘉兴中山西路证券营业部","2866096.0000","35897272.8400"],\
 	## ["000559","万向钱潮","S","5","2014-02-28","中信建投证券股份有限公司北京东直门南大街证券营业部","286133.9900","26737888.5600"]],_o:0}; 
-	
+	'''
 	if date is None:
         if du.get_hour() < 18:
             date = du.last_tddate()
@@ -430,41 +431,3 @@ def lhb_details(retry_count= 3, pause= 0.001, code=None, date=None):
 	for i in range(len(text['sell'])):
 		print('%-4d %-8s %-10s %-10s %-12s %s' %(i+1,text['sell'][i]['SYMBOL'],text['sell'][i]['sellAmount'],\
 			text['sell'][i]['buyAmount'],text['sell'][i]['netAmount'],text['sell'][i]['comName'])) 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
