@@ -380,6 +380,20 @@ def lhb_details(retry_count= 3, pause= 0.001, code=None, date=None):
 	## ["000559","万向钱潮","S","3","2014-02-28","信达证券股份有限公司福州远洋路证券营业部","5634897.8000","37590137.1300"],\
 	## ["000559","万向钱潮","S","4","2014-02-28","海通证券股份有限公司嘉兴中山西路证券营业部","2866096.0000","35897272.8400"],\
 	## ["000559","万向钱潮","S","5","2014-02-28","中信建投证券股份有限公司北京东直门南大街证券营业部","286133.9900","26737888.5600"]],_o:0}; 
+	
+	if date is None:
+        if du.get_hour() < 18:
+            date = du.last_tddate()
+        else:
+            date = du.today() 
+    else:
+        if(du.is_holiday(date)):
+            return None
+	
+	if code is None:
+		print('请输入股票代码,比如： lhb_details(000001)')
+		raise SystemExit(5)
+		
 	lhb_details_url = 'http://vip.stock.finance.sina.com.cn/q/api/jsonp.php/var%20details=/InvestConsultService.getLHBComBSData?symbol=%s&tradedate=%s&type=01'
 	text = urlopen(lhb_details_url%(code,date),timeout=10).read()
 	text = text.decode('GBK')
@@ -391,23 +405,31 @@ def lhb_details(retry_count= 3, pause= 0.001, code=None, date=None):
 	## text['buy'] = list of dicts
 	## text['sell'] = list of dicts
 	
-	for i in range(len(text['buy'])):
-		for key in text['buy'][i].keys():
-			print(text['buy'][i][key],end=' ')
-		print() 
+	#for i in range(len(text['buy'])):
+	#	for key in text['buy'][i].keys():
+	#		print(text['buy'][i][key],end=' ')
+	#	print() 
 	#SYMBOL	sellAmount	buyAmount	comCode	type	netAmount	comName
 	#000973 7.6802		2101.4900	80291363 01	2093.8098 浙商证券股份有限公司临安万马路证券营业部 
 	#000973 0.0000		1777.2700	80348499 01 1777.27 华泰证券股份有限公司浙江分公司 
 	#000973 317.3780	2069.5400	80127954 01 1752.162 安信证券股份有限公司南昌胜利路证券营业部 
 	#000973 0.9050		1389.3300	80564863 01 1388.425 华鑫证券有限责任公司郑州普惠路证券营业部 
 	#000973 39.0354		1239.5100	80034811 01 1200.4746 财通证券股份有限公司绍兴人民中路证券营业部 
+	
+	print('%4s %6s %10s %10s %10s %s' %('买入榜','股票代码','卖出额(万)','买入额(万)','买入净额(万)','营业部名称'))
+	for i in range(len(text['buy'])):
+		print('%-4d %-8s %-10s %-10s %-12s %s' %(i+1,text['buy'][i]['SYMBOL'],text['buy'][i]['sellAmount'],\
+			text['buy'][i]['buyAmount'],text['buy'][i]['netAmount'],text['buy'][i]['comName']))   
+	#1    000973   7.6802   2101.4900  2093.8098    浙商证券股份有限公司临安万马路证券营业部
+	#2    000973   0.0000   1777.2700  1777.27      华泰证券股份有限公司浙江分公司
+	#3    000973   317.3780 2069.5400  1752.162     安信证券股份有限公司南昌胜利路证券营业部
+	#4    000973   0.9050   1389.3300  1388.425     华鑫证券有限责任公司郑州普惠路证券营业部
+	#5    000973   39.0354  1239.5100  1200.4746    财通证券股份有限公司绍兴人民中路证券营业部
 
-
-
-	
-	
-	
-	
+	print('%4s %6s %10s %10s %10s %s' %('卖出榜','股票代码','卖出额(万)','买入额(万)','买入净额(万)','营业部名称'))
+	for i in range(len(text['sell'])):
+		print('%-4d %-8s %-10s %-10s %-12s %s' %(i+1,text['sell'][i]['SYMBOL'],text['sell'][i]['sellAmount'],\
+			text['sell'][i]['buyAmount'],text['sell'][i]['netAmount'],text['sell'][i]['comName'])) 
 	
 	
 	
